@@ -50,7 +50,8 @@ export default function Gallery() {
         color="#fff0a8"
       />
 
-      <VoxelFloor width={width} depth={depth} />
+      <WoodFloor width={width} depth={depth} />
+      <JapaneseFurniture />
       <ContactShadows
         position={[0, 0.04, 0]}
         opacity={0.32}
@@ -79,12 +80,98 @@ export default function Gallery() {
   )
 }
 
-function VoxelFloor({ width, depth }) {
+function WoodFloor({ width, depth }) {
+  const planks = useMemo(() => {
+    const result = []
+    const plankWidth = 2.8
+    const colors = ['#9f6b38', '#b47a42', '#8f5c30', '#c08a4e']
+
+    for (let x = -width / 2 + plankWidth / 2; x < width / 2; x += plankWidth) {
+      result.push({ x, color: colors[result.length % colors.length] })
+    }
+
+    return result
+  }, [width])
+
   return (
-    <mesh position={[0, -0.06, 0]} receiveShadow>
-      <boxGeometry args={[width, 0.12, depth]} />
-      <meshToonMaterial color="#8fb46a" />
-    </mesh>
+    <group>
+      <mesh position={[0, -0.14, 0]} receiveShadow>
+        <boxGeometry args={[width, 0.22, depth]} />
+        <meshToonMaterial color="#5b351f" />
+      </mesh>
+      {planks.map((plank) => (
+        <mesh key={plank.x} position={[plank.x, 0.01, 0]} receiveShadow>
+          <boxGeometry args={[2.68, 0.08, depth]} />
+          <meshToonMaterial color={plank.color} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+function JapaneseFurniture() {
+  const cushions = [
+    [-2.1, 0.2, -0.2, '#8f3f31'],
+    [2.1, 0.2, -0.2, '#305f73'],
+    [0, 0.2, -2.1, '#6f8f42'],
+    [0, 0.2, 1.7, '#d4a64a'],
+  ]
+
+  return (
+    <group position={[0, 0.02, 0]}>
+      <mesh position={[0, 0.03, -0.2]} receiveShadow>
+        <boxGeometry args={[6.6, 0.06, 5.2]} />
+        <meshToonMaterial color="#d7c184" />
+        <Outlines thickness={0.012} color="#6f5b34" />
+      </mesh>
+      <mesh position={[0, 0.1, -0.2]} receiveShadow>
+        <boxGeometry args={[0.08, 0.07, 5.1]} />
+        <meshToonMaterial color="#80683e" />
+      </mesh>
+      <mesh position={[0, 0.34, -0.2]} castShadow receiveShadow>
+        <boxGeometry args={[2.8, 0.24, 1.45]} />
+        <meshToonMaterial color="#6b4024" />
+        <Outlines thickness={0.02} color="#2d190e" />
+      </mesh>
+      <mesh position={[0, 0.52, -0.2]} castShadow receiveShadow>
+        <boxGeometry args={[2.95, 0.16, 1.6]} />
+        <meshToonMaterial color="#a06b37" />
+        <Outlines thickness={0.02} color="#2d190e" />
+      </mesh>
+
+      {cushions.map(([x, y, z, color]) => (
+        <mesh key={`${x}-${z}`} position={[x, y, z]} castShadow receiveShadow>
+          <boxGeometry args={[1.25, 0.24, 1.25]} />
+          <meshToonMaterial color={color} />
+          <Outlines thickness={0.018} color="#2d190e" />
+        </mesh>
+      ))}
+
+      <group position={[3.7, 0, 2.2]}>
+        <mesh position={[0, 0.65, 0]} castShadow>
+          <boxGeometry args={[0.22, 1.3, 0.22]} />
+          <meshToonMaterial color="#5a341f" />
+        </mesh>
+        <mesh position={[0, 1.18, 0]} castShadow>
+          <boxGeometry args={[0.9, 0.64, 0.9]} />
+          <meshToonMaterial color="#fff1bb" />
+          <Outlines thickness={0.016} color="#5a341f" />
+        </mesh>
+        <pointLight position={[0, 1.18, 0]} intensity={0.45} distance={5.5} color="#ffd98a" />
+      </group>
+
+      <group position={[-3.7, 0, 2.1]}>
+        <mesh position={[0, 0.25, 0]} castShadow receiveShadow>
+          <boxGeometry args={[1.1, 0.22, 0.72]} />
+          <meshToonMaterial color="#5a341f" />
+        </mesh>
+        <mesh position={[0, 0.58, 0]} castShadow>
+          <coneGeometry args={[0.52, 0.86, 6]} />
+          <meshToonMaterial color="#477347" />
+          <Outlines thickness={0.015} color="#1f3a1f" />
+        </mesh>
+      </group>
+    </group>
   )
 }
 
@@ -111,48 +198,6 @@ function Ceiling({ width, depth, height }) {
           <boxGeometry args={[1.1, 0.7, depth - 2]} />
           <meshToonMaterial color={BLOCK.oak} />
           <Outlines thickness={0.018} color="#3f2a18" />
-        </mesh>
-      ))}
-    </group>
-  )
-}
-
-function ZoneMarkers() {
-  return (
-    <group>
-      {ZONES.map((zone) => (
-        <group key={`marker-${zone.id}`} position={[zone.x, 0, zone.z]}>
-          <mesh position={[0, 1.05, -zone.d / 2 + 1]} castShadow>
-            <boxGeometry args={[5.4, 2.1, 0.6]} />
-            <meshToonMaterial color={zone.accent} />
-            <Outlines thickness={0.025} color="#242424" />
-          </mesh>
-          <mesh position={[0, 2.45, -zone.d / 2 + 1]} castShadow>
-            <boxGeometry args={[6.4, 0.55, 0.9]} />
-            <meshToonMaterial color={BLOCK.oak} />
-            <Outlines thickness={0.02} color="#3f2a18" />
-          </mesh>
-        </group>
-      ))}
-    </group>
-  )
-}
-
-function BlockInstallations() {
-  const blocks = useMemo(() => [
-    [-20, 0.55, -9, BLOCK.grassDark], [-22, 1.35, -9, BLOCK.grass], [-18, 1.0, -12, BLOCK.oak],
-    [18, 0.55, -8, BLOCK.prismarine], [21, 1.25, -10, BLOCK.prismarineDark], [14, 0.95, -13, '#63d7c7'],
-    [-4, 0.55, -18, BLOCK.netherrack], [0, 1.2, -18, BLOCK.lava], [4, 0.85, -18, '#9d3a2f'],
-    [-8, 0.55, 12, BLOCK.stone], [8, 0.75, 13, BLOCK.stoneDark], [0, 1.05, 16, BLOCK.glow],
-  ], [])
-
-  return (
-    <group>
-      {blocks.map(([x, y, z, color], index) => (
-        <mesh key={index} position={[x, y, z]} castShadow receiveShadow>
-          <boxGeometry args={[2.1, y * 2, 2.1]} />
-          <meshToonMaterial color={color} />
-          <Outlines thickness={0.02} color="#242424" />
         </mesh>
       ))}
     </group>
