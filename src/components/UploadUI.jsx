@@ -40,6 +40,7 @@ function fileToArtworkDataURL(file) {
  */
 export default function UploadUI() {
   const fileRef = useRef()
+  const [isOpen, setIsOpen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const selectedFrame = useGallery((s) => s.selectedFrame)
   const setSelectedFrame = useGallery((s) => s.setSelectedFrame)
@@ -84,50 +85,62 @@ export default function UploadUI() {
   const stop = (e) => e.stopPropagation()
 
   return (
-    <div className="ui-panel" onPointerDown={stop} onClick={stop}>
-      <h2>🖼️ 上傳畫作</h2>
-
-      <label htmlFor="frame-select">選擇畫框</label>
-      <select
-        id="frame-select"
-        value={selectedFrame}
-        onChange={(e) => setSelectedFrame(e.target.value)}
-      >
-        {FRAMES.map((f, i) => (
-          <option key={f.id} value={f.id}>
-            畫框 {i + 1} {artworks[f.id] ? '（已上傳）' : ''}
-          </option>
-        ))}
-      </select>
-
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/png, image/jpeg"
-        onChange={handleFile}
-      />
-      <button
-        className="upload-btn"
-        disabled={isUploading || syncStatus === 'saving'}
-        onClick={() => fileRef.current?.click()}
-      >
-        {isUploading || syncStatus === 'saving' ? '儲存到雲端...' : '選擇圖片上傳'}
+    <div className={`ui-panel ${isOpen ? 'is-open' : 'is-collapsed'}`} onPointerDown={stop} onClick={stop}>
+      <button className="panel-toggle" type="button" onClick={() => setIsOpen((value) => !value)}>
+        {isOpen ? '收起上傳' : '上傳畫作'}
       </button>
 
-      <p className="sync-status">
-        {syncStatus === 'loading' && '正在載入網上畫作...'}
-        {syncStatus === 'ready' && '已同步網上畫廊'}
-        {syncStatus === 'error' && `同步失敗：${syncError}`}
-      </p>
+      {!isOpen && syncStatus === 'error' && (
+        <p className="sync-status">同步失敗：{syncError}</p>
+      )}
 
-      {artworks[selectedFrame] && (
-        <button
-          className="upload-btn"
-          style={{ background: '#555' }}
-          onClick={handleClear}
-        >
-          移除此畫框圖片
-        </button>
+      {isOpen && (
+        <>
+          <h2>🖼️ 上傳畫作</h2>
+
+          <label htmlFor="frame-select">選擇畫框</label>
+          <select
+            id="frame-select"
+            value={selectedFrame}
+            onChange={(e) => setSelectedFrame(e.target.value)}
+          >
+            {FRAMES.map((f, i) => (
+              <option key={f.id} value={f.id}>
+                畫框 {i + 1} {artworks[f.id] ? '（已上傳）' : ''}
+              </option>
+            ))}
+          </select>
+
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={handleFile}
+          />
+          <button
+            className="upload-btn"
+            disabled={isUploading || syncStatus === 'saving'}
+            onClick={() => fileRef.current?.click()}
+          >
+            {isUploading || syncStatus === 'saving' ? '儲存到雲端...' : '選擇圖片上傳'}
+          </button>
+
+          <p className="sync-status">
+            {syncStatus === 'loading' && '正在載入網上畫作...'}
+            {syncStatus === 'ready' && '已同步網上畫廊'}
+            {syncStatus === 'error' && `同步失敗：${syncError}`}
+          </p>
+
+          {artworks[selectedFrame] && (
+            <button
+              className="upload-btn"
+              style={{ background: '#555' }}
+              onClick={handleClear}
+            >
+              移除此畫框圖片
+            </button>
+          )}
+        </>
       )}
     </div>
   )

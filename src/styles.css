@@ -54,6 +54,34 @@ canvas {
   letter-spacing: 0;
 }
 
+.ui-panel.is-collapsed {
+  width: auto;
+  padding: 0;
+  gap: 6px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.panel-toggle {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #7a4f25;
+  border-radius: 10px;
+  background: #ffc857;
+  color: #2c1b12;
+  box-shadow: 0 4px 0 #7a4f25, 0 16px 34px rgba(44, 67, 86, 0.2);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.panel-toggle:hover {
+  background: #ff8f70;
+}
+
 .ui-panel label {
   font-size: 12px;
   color: #69573e;
@@ -280,6 +308,11 @@ canvas {
     left: 10px;
     width: min(220px, calc(100vw - 20px));
     padding: 12px;
+  }
+
+  .ui-panel.is-collapsed {
+    width: auto;
+    padding: 0;
   }
 
   .music-control {
