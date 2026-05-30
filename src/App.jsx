@@ -6,6 +6,7 @@ import FirstPersonPlayer from './components/FirstPersonPlayer'
 import Controls from './components/Controls'
 import Joystick from './components/Joystick'
 import UploadUI from './components/UploadUI'
+import BackgroundMusic from './components/BackgroundMusic'
 import { useGallery } from './store'
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
     <>
       {/* HTML 疊層 UI */}
       <UploadUI />
+      <BackgroundMusic />
       <Joystick />
       <div className="hint">
         WASD / 方向鍵或左下搖桿移動 · 拖曳轉視角 · 點畫作聚焦 · 點空白或 Esc 離開

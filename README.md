@@ -10,6 +10,7 @@ Minecraft-inspired 3D gallery built with React Three Fiber, Three.js, Vite, and 
 - Mobile joystick support
 - Upload PNG/JPG images into gallery frames
 - Shared online artwork storage with Cloudflare Pages Functions and KV
+- Looping background music with an in-game on/off control
 - Click artwork to focus/zoom inside the 3D scene
 
 ## Development

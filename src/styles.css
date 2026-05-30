@@ -101,6 +101,31 @@ canvas {
   display: none;
 }
 
+.music-control {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 12;
+}
+
+.music-button {
+  padding: 10px 14px;
+  min-width: 88px;
+  border: 2px solid #7a4f25;
+  border-radius: 10px;
+  background: #ffc857;
+  color: #2c1b12;
+  box-shadow: 0 4px 0 #7a4f25, 0 16px 34px rgba(44, 67, 86, 0.2);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.music-button:hover {
+  background: #ff8f70;
+}
+
 .hint {
   position: fixed;
   bottom: 16px;
@@ -255,6 +280,17 @@ canvas {
     left: 10px;
     width: min(220px, calc(100vw - 20px));
     padding: 12px;
+  }
+
+  .music-control {
+    top: 10px;
+    right: 10px;
+  }
+
+  .music-button {
+    min-width: 74px;
+    padding: 8px 10px;
+    font-size: 12px;
   }
 
   .hint {
