@@ -85,6 +85,18 @@ canvas {
   background: #ffc857;
 }
 
+.ui-panel .upload-btn:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.sync-status {
+  min-height: 14px;
+  font-size: 11px;
+  line-height: 1.3;
+  color: #69573e;
+}
+
 .ui-panel input[type="file"] {
   display: none;
 }

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PCFSoftShadowMap } from 'three'
 import Gallery from './components/Gallery'
@@ -5,8 +6,15 @@ import FirstPersonPlayer from './components/FirstPersonPlayer'
 import Controls from './components/Controls'
 import Joystick from './components/Joystick'
 import UploadUI from './components/UploadUI'
+import { useGallery } from './store'
 
 export default function App() {
+  const syncArtworks = useGallery((s) => s.syncArtworks)
+
+  useEffect(() => {
+    syncArtworks()
+  }, [syncArtworks])
+
   return (
     <>
       {/* HTML 疊層 UI */}

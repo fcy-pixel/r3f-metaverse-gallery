@@ -149,22 +149,80 @@ const galleryStorage = {
   },
 }
 
+const ARTWORKS_API = '/api/artworks'
+
+async function requestJSON(url, options) {
+  const response = await fetch(url, options)
+
+  if (!response.ok) {
+    let message = '雲端畫廊暫時未能更新'
+    try {
+      const data = await response.json()
+      if (data?.error) message = data.error
+    } catch {
+      message = response.statusText || message
+    }
+    throw new Error(message)
+  }
+
+  return response.json()
+}
+
 export const useGallery = create(
   persist(
-    (set) => ({
+    (set, get) => ({
       artworks: {},
       selectedFrame: FRAMES[0].id,
       zoomFrame: null,
+      syncStatus: 'idle',
+      syncError: null,
 
       setSelectedFrame: (id) => set({ selectedFrame: id }),
-      setArtwork: (frameId, dataURL) =>
-        set((state) => ({ artworks: { ...state.artworks, [frameId]: dataURL } })),
-      clearArtwork: (frameId) =>
+      syncArtworks: async () => {
+        set({ syncStatus: 'loading', syncError: null })
+        try {
+          const data = await requestJSON(`${ARTWORKS_API}?v=${Date.now()}`, { cache: 'no-store' })
+          set({ artworks: data.artworks ?? {}, syncStatus: 'ready', syncError: null })
+        } catch (error) {
+          set({ syncStatus: 'error', syncError: error.message })
+        }
+      },
+      setArtwork: async (frameId, dataURL) => {
+        const previousArtworks = get().artworks
+        set((state) => ({
+          artworks: { ...state.artworks, [frameId]: dataURL },
+          syncStatus: 'saving',
+          syncError: null,
+        }))
+
+        try {
+          await requestJSON(`${ARTWORKS_API}/${encodeURIComponent(frameId)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ dataURL }),
+          })
+          set({ syncStatus: 'ready', syncError: null })
+        } catch (error) {
+          set({ artworks: previousArtworks, syncStatus: 'error', syncError: error.message })
+          throw error
+        }
+      },
+      clearArtwork: async (frameId) => {
+        const previousArtworks = get().artworks
         set((state) => {
           const next = { ...state.artworks }
           delete next[frameId]
-          return { artworks: next }
-        }),
+          return { artworks: next, syncStatus: 'saving', syncError: null }
+        })
+
+        try {
+          await requestJSON(`${ARTWORKS_API}/${encodeURIComponent(frameId)}`, { method: 'DELETE' })
+          set({ syncStatus: 'ready', syncError: null })
+        } catch (error) {
+          set({ artworks: previousArtworks, syncStatus: 'error', syncError: error.message })
+          throw error
+        }
+      },
 
       openZoom: (frameId) => set({ zoomFrame: frameId }),
       closeZoom: () => set({ zoomFrame: null }),
