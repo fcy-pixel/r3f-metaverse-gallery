@@ -1,5 +1,5 @@
 name = "r3f-metaverse-gallery"
-compatibility_date = "2026-05-31"
+compatibility_date = "2024-09-23"
 pages_build_output_dir = "dist"
 
 [[kv_namespaces]]
