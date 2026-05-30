@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from 'react'
 import { TextureLoader, SRGBColorSpace } from 'three'
-import { Outlines } from '@react-three/drei'
+import { Outlines, Text } from '@react-three/drei'
 import { useGallery } from '../store'
 
 const FRAME_W = 2.8 // 畫框寬
@@ -16,7 +16,9 @@ const MAT_H = FRAME_H + 0.34
  *  - hover 有描邊與游標提示
  */
 export default function Frame({ id, position, rotation, color }) {
-  const dataURL = useGallery((s) => s.artworks[id])
+  const artwork = useGallery((s) => s.artworks[id])
+  const dataURL = typeof artwork === 'string' ? artwork : artwork?.dataURL
+  const title = typeof artwork === 'object' ? artwork.title : ''
   const openZoom = useGallery((s) => s.openZoom)
   const [hovered, setHovered] = useState(false)
 
@@ -61,6 +63,20 @@ export default function Frame({ id, position, rotation, color }) {
         <meshToonMaterial color="#ffc857" />
         <Outlines thickness={0.018} color="#5a3b12" />
       </mesh>
+
+      {title && (
+        <Text
+          position={[0, -MAT_H / 2 - 0.19, 0.17]}
+          fontSize={0.13}
+          maxWidth={1.85}
+          textAlign="center"
+          anchorX="center"
+          anchorY="middle"
+          color="#2c1b12"
+        >
+          {title}
+        </Text>
+      )}
 
       {/* 畫布：點擊放大 */}
       <mesh

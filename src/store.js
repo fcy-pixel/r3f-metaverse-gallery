@@ -151,6 +151,15 @@ const galleryStorage = {
 
 const ARTWORKS_API = '/api/artworks'
 
+const normalizeArtwork = (value) => {
+  if (!value) return null
+  if (typeof value === 'string') return { dataURL: value, title: '' }
+  return {
+    dataURL: value.dataURL ?? null,
+    title: typeof value.title === 'string' ? value.title : '',
+  }
+}
+
 async function requestJSON(url, options) {
   const response = await fetch(url, options)
 
@@ -182,15 +191,21 @@ export const useGallery = create(
         set({ syncStatus: 'loading', syncError: null })
         try {
           const data = await requestJSON(`${ARTWORKS_API}?v=${Date.now()}`, { cache: 'no-store' })
-          set({ artworks: data.artworks ?? {}, syncStatus: 'ready', syncError: null })
+          const artworks = Object.fromEntries(
+            Object.entries(data.artworks ?? {})
+              .map(([frameId, artwork]) => [frameId, normalizeArtwork(artwork)])
+              .filter(([, artwork]) => artwork),
+          )
+          set({ artworks, syncStatus: 'ready', syncError: null })
         } catch (error) {
           set({ syncStatus: 'error', syncError: error.message })
         }
       },
-      setArtwork: async (frameId, dataURL) => {
+      setArtwork: async (frameId, dataURL, title = '', adminAuth) => {
         const previousArtworks = get().artworks
+        const nextArtwork = { dataURL, title: title.trim().slice(0, 80) }
         set((state) => ({
-          artworks: { ...state.artworks, [frameId]: dataURL },
+          artworks: { ...state.artworks, [frameId]: nextArtwork },
           syncStatus: 'saving',
           syncError: null,
         }))
@@ -198,8 +213,8 @@ export const useGallery = create(
         try {
           await requestJSON(`${ARTWORKS_API}/${encodeURIComponent(frameId)}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ dataURL }),
+            headers: { 'Content-Type': 'application/json', Authorization: adminAuth },
+            body: JSON.stringify(nextArtwork),
           })
           set({ syncStatus: 'ready', syncError: null })
         } catch (error) {
@@ -207,7 +222,29 @@ export const useGallery = create(
           throw error
         }
       },
-      clearArtwork: async (frameId) => {
+      setArtworkTitle: async (frameId, title, adminAuth) => {
+        const previousArtworks = get().artworks
+        const currentArtwork = normalizeArtwork(previousArtworks[frameId]) ?? { dataURL: null, title: '' }
+        const nextArtwork = { ...currentArtwork, title: title.trim().slice(0, 80) }
+        set((state) => ({
+          artworks: { ...state.artworks, [frameId]: nextArtwork },
+          syncStatus: 'saving',
+          syncError: null,
+        }))
+
+        try {
+          await requestJSON(`${ARTWORKS_API}/${encodeURIComponent(frameId)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', Authorization: adminAuth },
+            body: JSON.stringify(nextArtwork),
+          })
+          set({ syncStatus: 'ready', syncError: null })
+        } catch (error) {
+          set({ artworks: previousArtworks, syncStatus: 'error', syncError: error.message })
+          throw error
+        }
+      },
+      clearArtwork: async (frameId, adminAuth) => {
         const previousArtworks = get().artworks
         set((state) => {
           const next = { ...state.artworks }
@@ -216,7 +253,10 @@ export const useGallery = create(
         })
 
         try {
-          await requestJSON(`${ARTWORKS_API}/${encodeURIComponent(frameId)}`, { method: 'DELETE' })
+          await requestJSON(`${ARTWORKS_API}/${encodeURIComponent(frameId)}`, {
+            method: 'DELETE',
+            headers: { Authorization: adminAuth },
+          })
           set({ syncStatus: 'ready', syncError: null })
         } catch (error) {
           set({ artworks: previousArtworks, syncStatus: 'error', syncError: error.message })

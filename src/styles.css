@@ -87,6 +87,7 @@ canvas {
   color: #69573e;
 }
 
+.ui-panel input:not([type="file"]),
 .ui-panel select,
 .ui-panel .upload-btn {
   width: 100%;
@@ -113,6 +114,15 @@ canvas {
   background: #ffc857;
 }
 
+.ui-panel .upload-btn.secondary {
+  background: #9ed6d1;
+}
+
+.ui-panel .upload-btn.danger {
+  background: #555;
+  color: #fff4d8;
+}
+
 .ui-panel .upload-btn:disabled {
   cursor: wait;
   opacity: 0.72;
@@ -123,6 +133,39 @@ canvas {
   font-size: 11px;
   line-height: 1.3;
   color: #69573e;
+}
+
+.admin-login {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: #69573e;
+}
+
+.admin-row button {
+  padding: 5px 8px;
+  border: 2px solid rgba(76, 55, 34, 0.2);
+  border-radius: 8px;
+  background: #fffaf0;
+  color: #2f2b25;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.login-error {
+  font-size: 11px;
+  line-height: 1.3;
+  color: #a93824;
 }
 
 .ui-panel input[type="file"] {

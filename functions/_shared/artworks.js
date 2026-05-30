@@ -7,6 +7,11 @@ export const FRAME_IDS = new Set([
 
 export const artworkKey = (frameId) => `artwork:${frameId}`
 
+export function isAdminRequest(request) {
+  const authorization = request.headers.get('Authorization') ?? ''
+  return authorization === `Basic ${btoa('admin:admin')}`
+}
+
 export function json(data, status = 200) {
   return Response.json(data, {
     status,
@@ -18,4 +23,22 @@ export function json(data, status = 200) {
 
 export function isValidArtworkDataURL(value) {
   return typeof value === 'string' && /^data:image\/(png|jpe?g|webp);base64,/i.test(value)
+}
+
+export function normalizeArtwork(value) {
+  if (!value) return null
+
+  if (isValidArtworkDataURL(value)) {
+    return { dataURL: value, title: '' }
+  }
+
+  try {
+    const data = JSON.parse(value)
+    return {
+      dataURL: isValidArtworkDataURL(data?.dataURL) ? data.dataURL : null,
+      title: typeof data?.title === 'string' ? data.title.slice(0, 80) : '',
+    }
+  } catch {
+    return null
+  }
 }

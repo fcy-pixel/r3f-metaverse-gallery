@@ -1,4 +1,4 @@
-import { artworkKey, FRAME_IDS, json } from '../../_shared/artworks'
+import { artworkKey, FRAME_IDS, json, normalizeArtwork } from '../../_shared/artworks'
 
 export async function onRequestGet({ env }) {
   if (!env.GALLERY_ARTWORKS) {
@@ -11,7 +11,8 @@ export async function onRequestGet({ env }) {
   )
 
   for (const [frameId, dataURL] of pairs) {
-    if (dataURL) artworks[frameId] = dataURL
+    const artwork = normalizeArtwork(dataURL)
+    if (artwork) artworks[frameId] = artwork
   }
 
   return json({ artworks })
