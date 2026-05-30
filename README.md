@@ -9,6 +9,7 @@ Minecraft-inspired 3D gallery built with React Three Fiber, Three.js, Vite, and 
 - First-person movement with keyboard and drag-look
 - Mobile joystick support
 - Upload PNG/JPG images into gallery frames
+- Shared online artwork storage with Cloudflare Pages Functions and KV
 - Click artwork to focus/zoom inside the 3D scene
 
 ## Development
@@ -30,3 +31,5 @@ npm run build
 npm run build
 wrangler pages deploy dist --project-name r3f-metaverse-gallery
 ```
+
+Uploaded artworks are stored in the `GALLERY_ARTWORKS` KV namespace configured in `wrangler.toml`, so all visitors see the same gallery state on the deployed site.
