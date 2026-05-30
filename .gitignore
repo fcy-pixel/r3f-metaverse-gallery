@@ -1,6 +1,7 @@
 node_modules/
 dist/
 _worker.bundle
+public/background-music.mp3
 .DS_Store
 .env
 .env.*

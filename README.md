@@ -34,3 +34,5 @@ wrangler pages deploy dist --project-name r3f-metaverse-gallery
 ```
 
 Uploaded artworks are stored in the `GALLERY_ARTWORKS` KV namespace configured in `wrangler.toml`, so all visitors see the same gallery state on the deployed site.
+
+Background music is loaded from `public/background-music.mp3`. Use a file that you have permission to publish; the local MP3 is ignored by Git by default.
