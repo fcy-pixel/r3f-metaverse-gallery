@@ -22,9 +22,6 @@ export default function App() {
       <UploadUI />
       <BackgroundMusic />
       <Joystick />
-      <div className="hint">
-        WASD / 方向鍵或左下搖桿移動 · 拖曳轉視角 · 點畫作聚焦 · 點空白或 Esc 離開
-      </div>
 
       <Canvas
         shadows={{ type: PCFSoftShadowMap }}

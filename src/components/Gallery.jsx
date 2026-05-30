@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { DoubleSide } from 'three'
 import { ContactShadows, Outlines, Sparkles } from '@react-three/drei'
-import { FRAMES, ROOM, ZONES } from '../store'
+import { FRAMES, ROOM } from '../store'
 import Frame from './Frame'
 
 const BLOCK = {
@@ -51,8 +51,6 @@ export default function Gallery() {
       />
 
       <VoxelFloor width={width} depth={depth} />
-      <ZoneCarpets />
-      <PathLines />
       <ContactShadows
         position={[0, 0.04, 0]}
         opacity={0.32}
@@ -82,74 +80,11 @@ export default function Gallery() {
 }
 
 function VoxelFloor({ width, depth }) {
-  const tiles = useMemo(() => {
-    const result = []
-    const size = 4
-    for (let x = -width / 2 + size / 2; x < width / 2; x += size) {
-      for (let z = -depth / 2 + size / 2; z < depth / 2; z += size) {
-        const checker = (Math.round(x / size) + Math.round(z / size)) % 2 === 0
-        result.push({ x, z, color: checker ? '#8fb46a' : '#789a5d' })
-      }
-    }
-    return result
-  }, [width, depth])
-
   return (
-    <group>
-      <mesh position={[0, -0.16, 0]} receiveShadow>
-        <boxGeometry args={[width, 0.32, depth]} />
-        <meshToonMaterial color={BLOCK.dirt} />
-      </mesh>
-      {tiles.map((tile) => (
-        <mesh key={`${tile.x}-${tile.z}`} position={[tile.x, 0.02, tile.z]} receiveShadow>
-          <boxGeometry args={[3.86, 0.08, 3.86]} />
-          <meshToonMaterial color={tile.color} />
-        </mesh>
-      ))}
-    </group>
-  )
-}
-
-function ZoneCarpets() {
-  return (
-    <group>
-      {ZONES.map((zone) => (
-        <group key={zone.id}>
-          <mesh position={[zone.x, 0.09, zone.z]} receiveShadow>
-            <boxGeometry args={[zone.w, 0.1, zone.d]} />
-            <meshToonMaterial color={zone.color} />
-            <Outlines thickness={0.018} color="#1f271f" />
-          </mesh>
-          <mesh position={[zone.x, 0.16, zone.z]} receiveShadow>
-            <boxGeometry args={[zone.w - 2, 0.06, zone.d - 2]} />
-            <meshToonMaterial color={zone.accent} />
-          </mesh>
-        </group>
-      ))}
-    </group>
-  )
-}
-
-function PathLines() {
-  return (
-    <group>
-      <mesh position={[0, 0.2, 0]} receiveShadow>
-        <boxGeometry args={[5.4, 0.08, 42]} />
-        <meshToonMaterial color={BLOCK.sand} />
-      </mesh>
-      <mesh position={[0, 0.22, -7]} receiveShadow>
-        <boxGeometry args={[42, 0.08, 5.4]} />
-        <meshToonMaterial color={BLOCK.sand} />
-      </mesh>
-      <mesh position={[0, 0.26, 0]} receiveShadow>
-        <boxGeometry args={[1.2, 0.08, 38]} />
-        <meshToonMaterial color="#f5e6a6" />
-      </mesh>
-      <mesh position={[0, 0.27, -7]} receiveShadow>
-        <boxGeometry args={[38, 0.08, 1.2]} />
-        <meshToonMaterial color="#f5e6a6" />
-      </mesh>
-    </group>
+    <mesh position={[0, -0.06, 0]} receiveShadow>
+      <boxGeometry args={[width, 0.12, depth]} />
+      <meshToonMaterial color="#8fb46a" />
+    </mesh>
   )
 }
 

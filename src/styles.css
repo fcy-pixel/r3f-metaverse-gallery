@@ -154,22 +154,6 @@ canvas {
   background: #ff8f70;
 }
 
-.hint {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  padding: 8px 16px;
-  font-size: 13px;
-  color: #2f2b25;
-  background: rgba(255, 245, 220, 0.82);
-  border: 2px solid rgba(255, 200, 87, 0.75);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(44, 67, 86, 0.22);
-  pointer-events: none;
-}
-
 /* 進入畫廊提示遮罩 */
 .lock-overlay {
   position: fixed;
@@ -326,11 +310,5 @@ canvas {
     font-size: 12px;
   }
 
-  .hint {
-    width: calc(100vw - 28px);
-    bottom: 12px;
-    text-align: center;
-    font-size: 12px;
-  }
 }
 
