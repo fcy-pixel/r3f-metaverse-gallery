@@ -69,8 +69,6 @@ export default function Gallery() {
       <Wall position={[width / 2, halfH, 0]} args={[wallT, height, depth]} accent="east" />
       <Ceiling width={width} depth={depth} height={height} />
 
-      <ZoneMarkers />
-      <BlockInstallations />
       <Lanterns />
 
       {FRAMES.map((frame) => (

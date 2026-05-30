@@ -77,7 +77,7 @@ export default function Frame({ id, position, rotation, color }) {
       >
         <planeGeometry args={[FRAME_W, FRAME_H]} />
         {texture ? (
-          <meshToonMaterial map={texture} />
+          <meshBasicMaterial map={texture} toneMapped={false} />
         ) : (
           <meshToonMaterial color={color} />
         )}

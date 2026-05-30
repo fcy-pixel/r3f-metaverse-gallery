@@ -46,7 +46,7 @@ export default function FirstPersonPlayer() {
       camera.updateProjectionMatrix()
     }
 
-    const lookX = Math.sin(yaw)
+    const lookX = -Math.sin(yaw)
     const lookZ = -Math.cos(yaw)
     look.current.set(lookX, 0, lookZ)
     right.current.set(-lookZ, 0, lookX)
