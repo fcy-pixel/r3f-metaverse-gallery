@@ -83,15 +83,25 @@ export default function Gallery() {
 function WoodFloor({ width, depth }) {
   const planks = useMemo(() => {
     const result = []
-    const plankWidth = 2.8
+    const plankWidth = 1.4
+    const plankDepth = 5.6
     const colors = ['#9f6b38', '#b47a42', '#8f5c30', '#c08a4e']
 
     for (let x = -width / 2 + plankWidth / 2; x < width / 2; x += plankWidth) {
-      result.push({ x, color: colors[result.length % colors.length] })
+      const column = Math.round((x + width / 2) / plankWidth)
+      const offset = column % 2 === 0 ? 0 : plankDepth / 2
+
+      for (let z = -depth / 2 + plankDepth / 2 - offset; z < depth / 2; z += plankDepth) {
+        result.push({
+          x,
+          z,
+          color: colors[(result.length + column) % colors.length],
+        })
+      }
     }
 
     return result
-  }, [width])
+  }, [width, depth])
 
   return (
     <group>
@@ -100,8 +110,8 @@ function WoodFloor({ width, depth }) {
         <meshToonMaterial color="#5b351f" />
       </mesh>
       {planks.map((plank) => (
-        <mesh key={plank.x} position={[plank.x, 0.01, 0]} receiveShadow>
-          <boxGeometry args={[2.68, 0.08, depth]} />
+        <mesh key={`${plank.x}-${plank.z}`} position={[plank.x, 0.01, plank.z]} receiveShadow>
+          <boxGeometry args={[1.3, 0.08, 5.45]} />
           <meshToonMaterial color={plank.color} />
         </mesh>
       ))}
