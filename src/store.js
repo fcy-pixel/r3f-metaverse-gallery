@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 export const ROOM = {
   width: 56,
@@ -67,21 +68,114 @@ export const FRAMES = [
   { id: 's5', floor: 1, zone: 'spawn', position: [18, 2.8, D], rotation: [0, Math.PI, 0], color: nextColor() },
 ]
 
-export const useGallery = create((set) => ({
-  artworks: {},
-  selectedFrame: FRAMES[0].id,
-  zoomFrame: null,
+const DB_NAME = 'r3f-metaverse-gallery-db'
+const STORE_NAME = 'gallery-state'
 
-  setSelectedFrame: (id) => set({ selectedFrame: id }),
-  setArtwork: (frameId, dataURL) =>
-    set((state) => ({ artworks: { ...state.artworks, [frameId]: dataURL } })),
-  clearArtwork: (frameId) =>
-    set((state) => {
-      const next = { ...state.artworks }
-      delete next[frameId]
-      return { artworks: next }
+const openStorageDB = () =>
+  new Promise((resolve, reject) => {
+    if (typeof window === 'undefined' || !window.indexedDB) {
+      reject(new Error('IndexedDB is unavailable'))
+      return
+    }
+
+    const request = window.indexedDB.open(DB_NAME, 1)
+
+    request.onupgradeneeded = () => {
+      const db = request.result
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME)
+      }
+    }
+
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+
+const withGalleryStore = async (mode, action) => {
+  const db = await openStorageDB()
+
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, mode)
+    const request = action(tx.objectStore(STORE_NAME))
+
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+    tx.oncomplete = () => db.close()
+    tx.onerror = () => {
+      db.close()
+      reject(tx.error)
+    }
+    tx.onabort = () => {
+      db.close()
+      reject(tx.error)
+    }
+  })
+}
+
+const fallbackStorage = {
+  getItem: (name) => window.localStorage.getItem(name),
+  setItem: (name, value) => window.localStorage.setItem(name, value),
+  removeItem: (name) => window.localStorage.removeItem(name),
+}
+
+const galleryStorage = {
+  getItem: async (name) => {
+    if (typeof window === 'undefined') return null
+
+    try {
+      const value = await withGalleryStore('readonly', (store) => store.get(name))
+      return value ?? fallbackStorage.getItem(name)
+    } catch {
+      return fallbackStorage.getItem(name)
+    }
+  },
+  setItem: async (name, value) => {
+    if (typeof window === 'undefined') return
+
+    try {
+      await withGalleryStore('readwrite', (store) => store.put(value, name))
+    } catch {
+      fallbackStorage.setItem(name, value)
+    }
+  },
+  removeItem: async (name) => {
+    if (typeof window === 'undefined') return
+
+    try {
+      await withGalleryStore('readwrite', (store) => store.delete(name))
+    } catch {
+      fallbackStorage.removeItem(name)
+    }
+  },
+}
+
+export const useGallery = create(
+  persist(
+    (set) => ({
+      artworks: {},
+      selectedFrame: FRAMES[0].id,
+      zoomFrame: null,
+
+      setSelectedFrame: (id) => set({ selectedFrame: id }),
+      setArtwork: (frameId, dataURL) =>
+        set((state) => ({ artworks: { ...state.artworks, [frameId]: dataURL } })),
+      clearArtwork: (frameId) =>
+        set((state) => {
+          const next = { ...state.artworks }
+          delete next[frameId]
+          return { artworks: next }
+        }),
+
+      openZoom: (frameId) => set({ zoomFrame: frameId }),
+      closeZoom: () => set({ zoomFrame: null }),
     }),
-
-  openZoom: (frameId) => set({ zoomFrame: frameId }),
-  closeZoom: () => set({ zoomFrame: null }),
-}))
+    {
+      name: 'r3f-metaverse-gallery',
+      storage: createJSONStorage(() => galleryStorage),
+      partialize: (state) => ({
+        artworks: state.artworks,
+        selectedFrame: state.selectedFrame,
+      }),
+    },
+  ),
+)
