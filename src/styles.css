@@ -1,0 +1,255 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Avenir Next", "Helvetica Neue", "PingFang TC", sans-serif;
+  background: #bfe7ff;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 48%, transparent 48%, rgba(49, 58, 91, 0.13) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 22%, rgba(255, 201, 87, 0.08));
+}
+
+canvas {
+  touch-action: none;
+}
+
+/* 上傳 UI 面板 */
+.ui-panel {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  width: 240px;
+  background: rgba(255, 245, 220, 0.84);
+  border: 2px solid rgba(255, 200, 87, 0.9);
+  border-radius: 14px;
+  color: #2f2b25;
+  box-shadow: 0 12px 0 rgba(76, 55, 34, 0.12), 0 22px 50px rgba(44, 67, 86, 0.22);
+  backdrop-filter: blur(12px) saturate(1.15);
+}
+
+.ui-panel h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.ui-panel label {
+  font-size: 12px;
+  color: #69573e;
+}
+
+.ui-panel select,
+.ui-panel .upload-btn {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 2px solid rgba(76, 55, 34, 0.16);
+  background: #fffaf0;
+  color: #2f2b25;
+  cursor: pointer;
+}
+
+.ui-panel .upload-btn {
+  text-align: center;
+  background: #ff8f70;
+  border: 2px solid #7a4f25;
+  color: #2c1b12;
+  font-weight: 800;
+  box-shadow: 0 4px 0 #7a4f25;
+  transition: background 0.15s ease;
+}
+
+.ui-panel .upload-btn:hover {
+  background: #ffc857;
+}
+
+.ui-panel input[type="file"] {
+  display: none;
+}
+
+.hint {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #2f2b25;
+  background: rgba(255, 245, 220, 0.82);
+  border: 2px solid rgba(255, 200, 87, 0.75);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(44, 67, 86, 0.22);
+  pointer-events: none;
+}
+
+/* 進入畫廊提示遮罩 */
+.lock-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+.lock-overlay h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.lock-overlay p {
+  font-size: 14px;
+  color: #c8c8d0;
+}
+
+.crosshair {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* 虛擬搖桿（手機）*/
+.joystick-base {
+  position: fixed;
+  bottom: 90px;
+  left: 30px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255, 245, 220, 0.44);
+  border: 3px solid rgba(255, 200, 87, 0.78);
+  box-shadow: 0 14px 40px rgba(44, 67, 86, 0.24);
+  z-index: 15;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.joystick-knob {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 143, 112, 0.92);
+  border: 3px solid #fff4d8;
+  box-shadow: inset 0 -6px 0 rgba(122, 79, 37, 0.18);
+  pointer-events: none;
+}
+
+/* 放大觀看 Modal */
+.zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(31, 37, 58, 0.74);
+  backdrop-filter: blur(4px);
+  padding: 24px;
+}
+
+.zoom-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 92vw;
+  max-height: 88vh;
+}
+
+.zoom-img {
+  max-width: 88vw;
+  max-height: 74vh;
+  border-radius: 8px;
+  box-shadow: 0 18px 0 rgba(0, 0, 0, 0.18), 0 28px 70px rgba(0, 0, 0, 0.48);
+  border: 8px solid #fff4d8;
+}
+
+.zoom-placeholder {
+  width: min(70vw, 480px);
+  height: min(50vh, 360px);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  border: 8px solid #fff4d8;
+  box-shadow: 0 18px 0 rgba(0, 0, 0, 0.18), 0 28px 70px rgba(0, 0, 0, 0.48);
+}
+
+.zoom-caption {
+  color: #fff;
+  font-size: 15px;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+.zoom-close {
+  padding: 10px 22px;
+  font-size: 14px;
+  color: #2c1b12;
+  background: #ffc857;
+  border: 2px solid #7a4f25;
+  border-radius: 24px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.zoom-close:hover {
+  background: #ff8f70;
+}
+
+@media (max-width: 640px) {
+  .ui-panel {
+    top: 10px;
+    left: 10px;
+    width: min(220px, calc(100vw - 20px));
+    padding: 12px;
+  }
+
+  .hint {
+    width: calc(100vw - 28px);
+    bottom: 12px;
+    text-align: center;
+    font-size: 12px;
+  }
+}
+
