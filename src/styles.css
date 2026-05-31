@@ -197,6 +197,42 @@ canvas {
   background: #ff8f70;
 }
 
+.school-brand {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(-50%);
+  padding: 8px 16px 8px 10px;
+  max-width: min(520px, calc(100vw - 260px));
+  border: 2px solid rgba(122, 79, 37, 0.36);
+  border-radius: 14px;
+  background: rgba(255, 250, 240, 0.84);
+  box-shadow: 0 10px 30px rgba(44, 67, 86, 0.2);
+  backdrop-filter: blur(12px) saturate(1.12);
+  pointer-events: none;
+}
+
+.school-brand img {
+  width: 42px;
+  height: auto;
+  flex: 0 0 auto;
+}
+
+.school-brand h1 {
+  overflow: hidden;
+  color: #30246d;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* 進入畫廊提示遮罩 */
 .lock-overlay {
   position: fixed;
@@ -345,6 +381,20 @@ canvas {
   .music-control {
     top: 10px;
     right: 10px;
+  }
+
+  .school-brand {
+    top: 56px;
+    max-width: calc(100vw - 20px);
+    padding: 6px 10px 6px 8px;
+  }
+
+  .school-brand img {
+    width: 34px;
+  }
+
+  .school-brand h1 {
+    font-size: 15px;
   }
 
   .music-button {

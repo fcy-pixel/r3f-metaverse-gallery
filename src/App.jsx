@@ -21,6 +21,10 @@ export default function App() {
       {/* HTML 疊層 UI */}
       <UploadUI />
       <BackgroundMusic />
+      <header className="school-brand" aria-label="中華基督教會基慈小學">
+        <img src="/school-logo.png" alt="中華基督教會基慈小學校徽" />
+        <h1>中華基督教會基慈小學</h1>
+      </header>
       <Joystick />
 
       <Canvas

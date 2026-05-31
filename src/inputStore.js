@@ -18,8 +18,8 @@ export const useInput = create((set, get) => ({
     set((s) => ({ move: { ...s.move, [axis]: value } })),
 
   addLook: (dx, dy) => {
-    const yaw = get().yaw - dx
-    let pitch = get().pitch + dy
+    const yaw = get().yaw + dx
+    let pitch = get().pitch - dy
     pitch = Math.max(-1.05, Math.min(1.05, pitch)) // 限制俯仰角
     set({ yaw, pitch })
   },
