@@ -7,6 +7,7 @@ import Controls from './components/Controls'
 import Joystick from './components/Joystick'
 import UploadUI from './components/UploadUI'
 import BackgroundMusic from './components/BackgroundMusic'
+import DaoGameUI from './components/DaoGameUI'
 import { useGallery } from './store'
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
       {/* HTML 疊層 UI */}
       <UploadUI />
       <BackgroundMusic />
+      <DaoGameUI />
       <header className="school-brand" aria-label="中華基督教會基慈小學">
         <img src="/school-logo.png" alt="中華基督教會基慈小學校徽" />
         <h1>中華基督教會基慈小學</h1>

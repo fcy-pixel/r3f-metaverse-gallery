@@ -3,6 +3,7 @@ import { DoubleSide } from 'three'
 import { ContactShadows, Outlines, Sparkles } from '@react-three/drei'
 import { FRAMES, ROOM } from '../store'
 import Frame from './Frame'
+import DaoNodes from './DaoNodes'
 
 const BLOCK = {
   grass: '#4f8b4f',
@@ -52,6 +53,7 @@ export default function Gallery() {
 
       <WoodFloor width={width} depth={depth} />
       <JapaneseFurniture />
+      <DaoNodes />
       <ContactShadows
         position={[0, 0.04, 0]}
         opacity={0.32}
