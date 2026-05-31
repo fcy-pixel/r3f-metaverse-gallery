@@ -274,7 +274,7 @@ canvas {
 /* 虛擬搖桿（手機）*/
 .joystick-base {
   position: fixed;
-  right: 24px;
+  left: 24px;
   bottom: 24px;
   width: 130px;
   height: 130px;
