@@ -26,7 +26,6 @@ export default function App() {
         <h1>中華基督教會基慈小學</h1>
       </header>
       <Joystick side="left" mode="move" />
-      <Joystick side="right" mode="look" />
 
       <Canvas
         shadows={{ type: PCFSoftShadowMap }}
