@@ -23,17 +23,9 @@ export default function BackgroundMusic() {
       return
     }
 
-    const play = async () => {
-      try {
-        await audio.play()
-        setStarted(true)
-      } catch {
-        setStarted(false)
-      }
-    }
-
-    if (started) play()
-  }, [enabled, started])
+    // 一進入就嘗試自動播放；若被瀏覽器阻擋，下方 effect 會在首次互動時補播。
+    audio.play().then(() => setStarted(true)).catch(() => setStarted(false))
+  }, [enabled])
 
   useEffect(() => {
     if (!enabled || started) return
@@ -79,7 +71,7 @@ export default function BackgroundMusic() {
 
   return (
     <div className="music-control" onPointerDown={(event) => event.stopPropagation()} onClick={(event) => event.stopPropagation()}>
-      <audio ref={audioRef} src={MUSIC_SRC} loop preload="auto" />
+      <audio ref={audioRef} src={MUSIC_SRC} loop autoPlay preload="auto" />
       <button type="button" className="music-button" aria-pressed={enabled} onClick={toggleMusic}>
         {enabled ? '音樂：開' : '音樂：關'}
       </button>
