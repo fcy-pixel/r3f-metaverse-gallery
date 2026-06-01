@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { MathUtils, Vector3 } from 'three'
 import { useInput } from '../inputStore'
-import { BOUNDS, FRAMES, ROOM, groundHeightAt, useGallery } from '../store'
+import { BOUNDS, FRAMES, ROOM, groundHeightAt, resolvePartitions, useGallery } from '../store'
 
 const SPEED = 6.8
 const EYE_HEIGHT = 1.7
@@ -60,6 +60,10 @@ export default function FirstPersonPlayer() {
 
       feet.current.x = MathUtils.clamp(feet.current.x, BOUNDS.minX, BOUNDS.maxX)
       feet.current.z = MathUtils.clamp(feet.current.z, BOUNDS.minZ, BOUNDS.maxZ)
+
+      const [rx, rz] = resolvePartitions(feet.current.x, feet.current.z)
+      feet.current.x = rx
+      feet.current.z = rz
     }
 
     const ground = groundHeightAt(feet.current.x, feet.current.z, feet.current.y)

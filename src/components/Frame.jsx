@@ -45,34 +45,35 @@ export default function Frame({ id, position, rotation, color }) {
 
   return (
     <group position={position} rotation={rotation}>
-      {/* 外框（卡通描邊木框）*/}
+      {/* 外框（鋁合金細邊）*/}
       <mesh castShadow>
         <boxGeometry args={[MAT_W + BORDER, MAT_H + BORDER, 0.16]} />
-        <meshToonMaterial color="#7a4f25" />
-        <Outlines thickness={0.05} color="#000000" />
+        <meshToonMaterial color="#aeb9c7" />
+        <Outlines thickness={0.04} color="#3a4654" />
       </mesh>
 
       <mesh position={[0, 0, 0.09]}>
         <boxGeometry args={[MAT_W, MAT_H, 0.08]} />
-        <meshToonMaterial color="#fff4d8" />
-        <Outlines thickness={0.025} color="#8f6b3e" />
+        <meshToonMaterial color="#ffffff" />
+        <Outlines thickness={0.025} color="#c2ccd9" />
       </mesh>
 
+      {/* 解說牌 */}
       <mesh position={[0, -MAT_H / 2 - 0.18, 0.1]} castShadow>
-        <boxGeometry args={[0.86, 0.16, 0.08]} />
-        <meshToonMaterial color="#ffc857" />
-        <Outlines thickness={0.018} color="#5a3b12" />
+        <boxGeometry args={[1.7, 0.26, 0.08]} />
+        <meshToonMaterial color="#5bc0de" />
+        <Outlines thickness={0.018} color="#2f7d97" />
       </mesh>
 
       {title && (
         <Text
-          position={[0, -MAT_H / 2 - 0.19, 0.17]}
-          fontSize={0.13}
-          maxWidth={1.85}
+          position={[0, -MAT_H / 2 - 0.18, 0.16]}
+          fontSize={0.14}
+          maxWidth={1.6}
           textAlign="center"
           anchorX="center"
           anchorY="middle"
-          color="#2c1b12"
+          color="#0f2a33"
         >
           {title}
         </Text>

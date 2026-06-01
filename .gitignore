@@ -6,3 +6,4 @@ public/background-music.mp3
 .env
 .env.*
 *.log
+.claude/

@@ -33,8 +33,8 @@ export default function App() {
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         camera={{ fov: 60, near: 0.1, far: 200, position: [0, 4, 22] }}
       >
-        <color attach="background" args={['#bfe7ff']} />
-        <fog attach="fog" args={['#bfe7ff', 42, 88]} />
+        <color attach="background" args={['#e8eef5']} />
+        <fog attach="fog" args={['#e8eef5', 48, 100]} />
         <Gallery />
         <FirstPersonPlayer />
         <Controls />
