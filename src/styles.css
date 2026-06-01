@@ -276,7 +276,6 @@ canvas {
 /* 虛擬搖桿（手機）*/
 .joystick-base {
   position: fixed;
-  left: 24px;
   bottom: 24px;
   width: 130px;
   height: 130px;
@@ -289,6 +288,24 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.joystick-base.joystick-left {
+  left: 24px;
+}
+
+.joystick-base.joystick-right {
+  right: 24px;
+}
+
+.joystick-hint {
+  position: absolute;
+  top: -22px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #2f7d97;
+  letter-spacing: 1px;
+  pointer-events: none;
 }
 
 .joystick-knob {

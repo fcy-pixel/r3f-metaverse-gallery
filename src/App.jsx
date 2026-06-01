@@ -25,7 +25,8 @@ export default function App() {
         <img src="/school-logo.png" alt="中華基督教會基慈小學校徽" />
         <h1>中華基督教會基慈小學</h1>
       </header>
-      <Joystick />
+      <Joystick side="left" mode="move" />
+      <Joystick side="right" mode="look" />
 
       <Canvas
         shadows={{ type: PCFSoftShadowMap }}
