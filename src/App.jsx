@@ -7,6 +7,7 @@ import Controls from './components/Controls'
 import Joystick from './components/Joystick'
 import UploadUI from './components/UploadUI'
 import BackgroundMusic from './components/BackgroundMusic'
+import EnterOverlay from './components/EnterOverlay'
 import { useGallery } from './store'
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <>
       {/* HTML 疊層 UI */}
+      <EnterOverlay />
       <UploadUI />
       <BackgroundMusic />
       <header className="school-brand" aria-label="中華基督教會基慈小學">

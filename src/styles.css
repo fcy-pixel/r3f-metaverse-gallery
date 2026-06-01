@@ -235,29 +235,85 @@ canvas {
   white-space: nowrap;
 }
 
-/* 進入畫廊提示遮罩 */
-.lock-overlay {
+/* 開場畫面：點擊進入畫廊 */
+.enter-overlay {
   position: fixed;
   inset: 0;
-  z-index: 20;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: pointer;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(91, 192, 222, 0.18), transparent 60%),
+    linear-gradient(160deg, #eaf2f9 0%, #d6e6f1 55%, #cfe7e4 100%);
+  animation: enter-fade 0.4s ease;
+}
+
+@keyframes enter-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.enter-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.55);
-  cursor: pointer;
+  gap: 10px;
+  padding: 36px 40px 30px;
+  max-width: min(440px, calc(100vw - 32px));
+  text-align: center;
+  background: rgba(255, 255, 255, 0.88);
+  border: 2px solid rgba(91, 192, 222, 0.7);
+  border-radius: 22px;
+  box-shadow: 0 18px 60px rgba(44, 67, 86, 0.28);
+  backdrop-filter: blur(10px) saturate(1.1);
 }
 
-.lock-overlay h1 {
-  font-size: 28px;
-  font-weight: 700;
+.enter-logo {
+  width: 84px;
+  height: auto;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 6px 14px rgba(44, 67, 86, 0.25));
 }
 
-.lock-overlay p {
+.enter-card h1 {
+  color: #30246d;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.enter-sub {
+  color: #2f7d97;
   font-size: 14px;
-  color: #c8c8d0;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.enter-btn {
+  margin-top: 14px;
+  padding: 13px 30px;
+  border-radius: 26px;
+  background: #5bc0de;
+  border: 2px solid #2f7d97;
+  color: #06303d;
+  font-size: 17px;
+  font-weight: 900;
+  box-shadow: 0 5px 0 #2f7d97, 0 16px 34px rgba(44, 67, 86, 0.22);
+  animation: enter-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes enter-pulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.enter-tip {
+  margin-top: 10px;
+  color: #6b7c8c;
+  font-size: 12px;
 }
 
 .crosshair {
