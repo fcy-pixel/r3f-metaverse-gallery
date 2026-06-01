@@ -24,12 +24,13 @@ export default function Joystick({ side = 'left', mode = 'move' }) {
   const RADIUS = 55
   const LOOK_RATE = 2.6 // 視角旋轉速度（弧度/秒，於最大偏移時）
 
-  // look 模式：每幀依搖桿偏移持續旋轉視角
+  // look 模式：每幀依搖桿水平偏移持續旋轉視角（只左右，不上下）
+  // 搖桿向右 → 畫面向右轉；向左 → 向左轉。
   const lookLoop = (t) => {
     const dt = lastT.current ? Math.min((t - lastT.current) / 1000, 0.05) : 0
     lastT.current = t
-    const { x, y } = offset.current
-    useInput.getState().addLook((x / RADIUS) * LOOK_RATE * dt, (y / RADIUS) * LOOK_RATE * dt)
+    const { x } = offset.current
+    useInput.getState().addLook(-(x / RADIUS) * LOOK_RATE * dt, 0)
     rafRef.current = requestAnimationFrame(lookLoop)
   }
 
@@ -56,12 +57,14 @@ export default function Joystick({ side = 'left', mode = 'move' }) {
       dx = (dx / dist) * RADIUS
       dy = (dy / dist) * RADIUS
     }
-    setKnob({ x: dx, y: dy })
     if (mode === 'move') {
+      setKnob({ x: dx, y: dy })
       // 上 = 前進(z=+1)；y 軸往下為正，因此取負
       useInput.getState().setMove(dx / RADIUS, -dy / RADIUS)
     } else {
-      offset.current = { x: dx, y: dy }
+      // 視角搖桿只允許左右，鎖定上下
+      setKnob({ x: dx, y: 0 })
+      offset.current = { x: dx, y: 0 }
     }
   }
 
