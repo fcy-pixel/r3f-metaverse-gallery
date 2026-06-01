@@ -3,8 +3,8 @@ import { TextureLoader, SRGBColorSpace } from 'three'
 import { Outlines, Text } from '@react-three/drei'
 import { useGallery } from '../store'
 
-const FRAME_W = 2.88 // 畫布寬（16:9，對應 1920×1080 橫向相片）
-const FRAME_H = 1.62 // 畫布高（2.88 × 9/16）
+const FRAME_W = 2.88 // 畫布寬（4:3 橫向相片）
+const FRAME_H = 2.16 // 畫布高（2.88 × 3/4）
 const BORDER = 0.18 // 邊框厚度
 const MAT_W = FRAME_W + 0.34
 const MAT_H = FRAME_H + 0.34

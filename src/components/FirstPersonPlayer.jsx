@@ -11,9 +11,9 @@ const VIEW_FOV = 60
 const ZOOM_FOV = 38
 
 // 放大觀看時要完整看到的範圍（畫框外緣 + 邊距），用來依螢幕比例算出鏡頭距離
-// 16:9 畫框外緣約 3.4 × 2.14，留邊距
+// 4:3 畫框外緣約 3.4 × 2.68，留邊距
 const FIT_W = 3.7
-const FIT_H = 2.4
+const FIT_H = 2.95
 const MAX_ZOOM_DIST = 16
 
 const _target = new Vector3()
