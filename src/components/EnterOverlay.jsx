@@ -17,7 +17,7 @@ export default function EnterOverlay() {
         <img src="/school-logo.png" alt="中華基督教會基慈小學校徽" className="enter-logo" />
         <h1>中華基督教會基慈小學</h1>
         <p className="enter-sub">小學科學科 · 學生佳作展</p>
-        <span className="enter-btn">🔬 點擊進入畫廊</span>
+        <span className="enter-btn">🔬 點擊進入虛擬實驗室</span>
         <span className="enter-tip">進入後將播放背景音樂</span>
       </div>
     </div>
