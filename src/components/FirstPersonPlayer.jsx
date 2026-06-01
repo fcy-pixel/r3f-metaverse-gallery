@@ -8,7 +8,12 @@ const SPEED = 6.8
 const EYE_HEIGHT = 1.7
 const GRAVITY = 24
 const VIEW_FOV = 60
-const ZOOM_FOV = 34
+const ZOOM_FOV = 38
+
+// 放大觀看時要完整看到的範圍（畫框外緣 + 邊距），用來依螢幕比例算出鏡頭距離
+const FIT_W = 3.6
+const FIT_H = 2.7
+const MAX_ZOOM_DIST = 16
 
 const _target = new Vector3()
 const _focus = new Vector3()
@@ -88,8 +93,18 @@ function focusArtwork(camera, frame) {
   const ry = frame.rotation[1]
   _focus.set(x, y, z)
   _normal.set(Math.sin(ry), 0, Math.cos(ry))
-  _zoomPos.copy(_focus).addScaledVector(_normal, 3.2)
-  _zoomPos.y = y + 0.1
+
+  // 依目前視窗比例計算鏡頭距離，確保整幅畫作（含畫框）都進得了畫面。
+  // 直立手機（aspect < 1）時水平視野較窄，鏡頭會自動退後，避免畫作被裁切。
+  const vFov = (ZOOM_FOV * Math.PI) / 180
+  const tanV = Math.tan(vFov / 2)
+  const aspect = camera.aspect || 1
+  const distV = FIT_H / 2 / tanV
+  const distH = FIT_W / 2 / (tanV * aspect)
+  const dist = Math.min(Math.max(distV, distH), MAX_ZOOM_DIST)
+
+  _zoomPos.copy(_focus).addScaledVector(_normal, dist)
+  _zoomPos.y = y + 0.05
 
   camera.position.lerp(_zoomPos, 0.2)
   _target.copy(_focus)
